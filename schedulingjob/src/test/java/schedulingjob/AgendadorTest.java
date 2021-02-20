@@ -12,7 +12,7 @@ public class AgendadorTest {
 	
 	@Test
 	public void quandoNaoPossuirJobsParaAgendamentoDeveRetornarUmaListaVazia() {
-		Agendamento agendamento = new Agendamento(
+		JanelaExecucao agendamento = new JanelaExecucao(
 										LocalDateTime.now(), 
 										LocalDateTime.now().plusDays(1), 
 										Collections.<Job>emptyList()

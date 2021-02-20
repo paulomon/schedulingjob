@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Agendador {
 	
-	private final Agendamento agendamento;
+	private final JanelaExecucao agendamento;
 
-	public Agendador(final Agendamento agendamento) {
+	public Agendador(final JanelaExecucao agendamento) {
 		this.agendamento = agendamento;
 	}
 
