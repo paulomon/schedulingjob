@@ -9,8 +9,20 @@ public class Job {
 	private LocalDateTime dataMaximaConclusao;
 	private long tempoEstimado;
 	
+	public long getId() {
+		return id;
+	}
+	
+	public long getTempoEstimado() {
+		return tempoEstimado;
+	}
+	
 	public boolean tempoEstimadoDentroDoLimite(long limite) {
 		return tempoEstimado <= limite;
+	}
+	
+	public LocalDateTime getDataMaximaConclusao() {
+		return dataMaximaConclusao;
 	}
 	
 	private Job(long id, String descricao, LocalDateTime dataMaximaConclusao, long tempoEstimado) {
