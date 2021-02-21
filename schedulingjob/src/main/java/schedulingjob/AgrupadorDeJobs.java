@@ -12,7 +12,7 @@ public class AgrupadorDeJobs {
 	
 	public boolean adicionaJobSePossuirTempo(Job job) {
 		
-		if(incluirTempoEstimadoExcedeTempoMaximo(job)) {
+		if(incluirTempoEstimadoExcedeTempoMaximo(job.getTempoEstimado())) {
 			return false;
 		}
 		
@@ -21,8 +21,7 @@ public class AgrupadorDeJobs {
 		return true;
 	}
 
-	private boolean incluirTempoEstimadoExcedeTempoMaximo(Job job) {
-		long tempoEstimado = job.getTempoEstimado();
+	private boolean incluirTempoEstimadoExcedeTempoMaximo(long tempoEstimado) {
 		long tempoTotalExecucaoAtual = jobs.stream().mapToLong(j -> j.getTempoEstimado()).sum();
 		
 		if((tempoEstimado + tempoTotalExecucaoAtual) > TEMPO_MAXIMO_EXECUCAO_POR_JOB) {
