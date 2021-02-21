@@ -14,4 +14,12 @@ public class JanelaExecucao {
 		this.fimJanela = fimJanela;
 		this.jobs = jobs;
 	}
+	
+	public boolean possuiJobs() {
+		return !jobs.isEmpty();
+	}
+	
+	public List<Job> getJobs(){
+		return jobs;
+	}
 }
