@@ -43,11 +43,17 @@ public class AgendadorTest {
 
 	@Ignore
 	private JanelaExecucao criarJanelaOndeJobPossuaTempoEstimadoMaiorQuePermitido() {
-		Job job = new Job.JobBuilder().id(1).tempoEstimado(TEMPO_MAXIMO_EXECUCAO_POR_JOB + 1).build();
+		long tempoEstimado = TEMPO_MAXIMO_EXECUCAO_POR_JOB + 1;
+		
+		Job job = new Job.JobBuilder()
+						 .id(1)
+						 .dataMaximaConclusao(LocalDateTime.of(2019, 11, 11, 12, 0))
+						 .tempoEstimado(tempoEstimado)
+						 .build();
 		
 		JanelaExecucao agendamento = new JanelaExecucao(
-				LocalDateTime.now(), 
-				LocalDateTime.now().plusDays(1), 
+				LocalDateTime.of(2019, 11, 10, 9, 0), 
+				LocalDateTime.of(2019, 11, 11, 12, 0),  
 				Arrays.asList(job)
 			);
 		return agendamento;
@@ -116,14 +122,33 @@ public class AgendadorTest {
 	
 	@Ignore
 	private JanelaExecucao criarJanelaOndeJobsNaoPodemSerAgrupadosDevidoAoLimiteDeTempoDoAgrupamento() {
-		Job job1 = new Job.JobBuilder().id(1).dataMaximaConclusao(LocalDateTime.of(2019, 11, 10, 12, 0)).tempoEstimado(5).build();	
-		Job job2 = new Job.JobBuilder().id(2).dataMaximaConclusao(LocalDateTime.of(2019, 11, 11, 12, 0)).tempoEstimado(4).build();
-		Job job3 = new Job.JobBuilder().id(3).dataMaximaConclusao(LocalDateTime.of(2019, 11, 11, 8, 0)).tempoEstimado(6).build();
+		Job job1 = new Job.JobBuilder().id(1).dataMaximaConclusao(LocalDateTime.of(2019, 11, 10, 17, 0)).tempoEstimado(TEMPO_MAXIMO_EXECUCAO_POR_JOB).build();	
+		Job job2 = new Job.JobBuilder().id(2).dataMaximaConclusao(LocalDateTime.of(2019, 11, 11, 12, 0)).tempoEstimado(TEMPO_MAXIMO_EXECUCAO_POR_JOB).build();
+		Job job3 = new Job.JobBuilder().id(3).dataMaximaConclusao(LocalDateTime.of(2019, 11, 11, 8, 0)).tempoEstimado(TEMPO_MAXIMO_EXECUCAO_POR_JOB).build();
 		
 		return new JanelaExecucao(
 				LocalDateTime.of(2019, 11, 10, 9, 0), 
 				LocalDateTime.of(2019, 11, 11, 12, 0), 
 				Arrays.asList(job1, job2, job3)
+			);
+	}
+	
+	@Test(expected = DataMaximaConclusaoJobExcedidaException.class)
+	public void quandoNaoEPossivelRespeitarADataMaximaConclusaoDoJob() {
+		JanelaExecucao janela = criaJanelaComJobOndeNaoEPossivelRespeitarADataMaximaDeExecucaoDoJob();
+		Agendador agendador = new Agendador(janela);
+		agendador.getOrdensDeExecucao();
+	}
+	
+	@Ignore
+	private JanelaExecucao criaJanelaComJobOndeNaoEPossivelRespeitarADataMaximaDeExecucaoDoJob(){
+		Job job1 = new Job.JobBuilder().id(1).dataMaximaConclusao(LocalDateTime.of(2019, 11, 10, 12, 0)).tempoEstimado(4).build();
+		Job job2 = new Job.JobBuilder().id(1).dataMaximaConclusao(LocalDateTime.of(2019, 11, 10, 12, 0)).tempoEstimado(3).build();
+		
+		return new JanelaExecucao(
+				LocalDateTime.of(2019, 11, 10, 9, 0), 
+				LocalDateTime.of(2019, 11, 11, 12, 0), 
+				Arrays.asList(job1, job2)
 			);
 	}
 	

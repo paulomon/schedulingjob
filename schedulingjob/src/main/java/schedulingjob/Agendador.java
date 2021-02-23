@@ -21,18 +21,25 @@ public class Agendador {
 			return Collections.emptyList();
 		}
 		
+		validarJanela();
+		return calcularOrdens();
+	}
+
+	private void validarJanela() {
 		if(!janela.janelaPossuiTempoDisponivelParaTodosJobs()) {
 			throw new TempoMaximoJanelaExcedidoException();
 		}
 		
-		return calcularOrdens();
+		if(!janela.jobsPodemSerExecutadosRespeitandoSuaDataMaximaExecucao()) {
+			throw new DataMaximaConclusaoJobExcedidaException();
+		}
 	}
 
 	private List<List<Long>> calcularOrdens() {
 		
 		List<List<Long>> agrupamentoDeConjuntosDeJobs = new ArrayList<List<Long>>();
 		
-		for(Job job : getJobsOrdenadorPorDataMaximaConclusao()) {
+		for(Job job : janela.getJobsOrdenadorPorDataMaximaConclusao()) {
 			validarTempoMaximoExecucaoDoJob(job);			
 			agruparJob(agrupamentoDeConjuntosDeJobs, job);
 		}
@@ -51,16 +58,6 @@ public class Agendador {
 			agrupamentoDeConjuntosDeJobs.add(agrupadorDeJobs.gerarListaDeJobsELimpar());
 			agrupadorDeJobs.adicionaJobSePossuirTempo(job);
 		}
-	}
-
-	private List<Job> getJobsOrdenadorPorDataMaximaConclusao() {
-		List<Job> jobs = janela.getJobs();
-		
-		Collections.sort(jobs, (j1, j2) -> {
-			return j1.getDataMaximaConclusao().compareTo(j2.getDataMaximaConclusao());	
-		});
-		
-		return jobs;
 	}
 
 	private void validarTempoMaximoExecucaoDoJob(Job job) {
