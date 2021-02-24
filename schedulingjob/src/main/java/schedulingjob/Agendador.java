@@ -44,9 +44,7 @@ public class Agendador {
 			agruparJob(agrupamentoDeConjuntosDeJobs, job);
 		}
 		
-		if(agrupadorDeJobs.possuiJobs()) {
-			agrupamentoDeConjuntosDeJobs.add(agrupadorDeJobs.gerarListaDeJobsELimpar());
-		}
+		agrupamentoDeConjuntosDeJobs.add(agrupadorDeJobs.gerarListaDeJobsELimpar());
 		
 		return agrupamentoDeConjuntosDeJobs;
 	}

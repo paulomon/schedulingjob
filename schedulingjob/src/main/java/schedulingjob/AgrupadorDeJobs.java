@@ -37,8 +37,4 @@ public class AgrupadorDeJobs {
 		
 		return ids;
 	}
-	
-	public boolean possuiJobs() {
-		return !jobs.isEmpty();
-	}
 }
